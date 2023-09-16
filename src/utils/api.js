@@ -83,7 +83,7 @@ export default class Api {
       return Promise.reject(`Error: ${res.status}`);
     })
     .then((profile) => {
-      return profile.avatar
+      return Promise.resolve(profile.avatar);
     })
     .catch((err) => {
       return Promise.reject(err);
@@ -136,6 +136,14 @@ export default class Api {
       });
   }
 
+  changeLikeCardStatus(cardId, isLiked) {
+    if (isLiked) {
+      return this.unlikeCard(cardId);
+    } else {
+      return this.likeCard(cardId);
+    }
+  }
+
   likeCard(cardId) {
     return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
       method: "PUT",
@@ -148,7 +156,7 @@ export default class Api {
         return Promise.reject(`Error: ${res.status}`);
       })
       .then((cardData) => {
-        return cardData.likes.length;
+        return Promise.resolve(cardData);
       })
       .catch((err) => {
         return Promise.reject(err);
@@ -167,7 +175,7 @@ export default class Api {
         return Promise.reject(`Error: ${res.status}`);
       })
       .then((cardData) => {
-        return cardData.likes.length;
+        return Promise.resolve(cardData);
       })
       .catch((err) => {
         return Promise.reject(err);
