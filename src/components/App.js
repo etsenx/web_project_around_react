@@ -20,6 +20,8 @@ function App() {
     api.getUserInformation().then((data) => {
       setCurrentUser(data);
     });
+    const apiCall = api.getUserInformation();
+    console.log(apiCall);
   }, []);
 
   function handleEditAvatarClick() {
@@ -37,6 +39,13 @@ function App() {
   function handleCardClick(card) {
     setSelectedCard(card);
     setIsImagePopupOpen(!isImagePopupOpen);
+  }
+
+  function handleUpdateUser(updatedUserData) {
+    api
+      .updateProfile(updatedUserData.name, updatedUserData.about).then((data) => {
+        console.log(data);
+      });
   }
 
   function closeAllPopups() {
@@ -63,6 +72,7 @@ function App() {
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
           />
 
           {/* Popup for Profile Picture */}

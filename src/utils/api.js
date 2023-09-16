@@ -45,7 +45,7 @@ export default class Api {
   }
 
   // Update Profile
-  updateProfile(saveButton ,name, about) {
+  updateProfile(name, about) {
     fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
       headers: this.headers,
@@ -60,12 +60,16 @@ export default class Api {
         }
         return Promise.reject(`Error: ${res.status}`);
       })
+      .then((updatedData) => {
+        console.log(updatedData);
+        return Promise.resolve(updatedData);
+      })
       .catch((err) => {
         return Promise.reject(err);
       })
-      .finally(() => {
-        saveButton.textContent = "Done";
-      })
+      // .finally(() => {
+      //   saveButton.textContent = "Done";
+      // })
   }
 
   updateProfilePicture(saveButton, avatar) {

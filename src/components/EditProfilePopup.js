@@ -3,25 +3,38 @@ import PopupWithForm from "./PopupWithForm";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function EditProfilePopup(props) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser])
+  }, [currentUser]);
 
   function handleChange(e) {
     e.preventDefault();
-    e.target.name === 'name' ? setName(e.target.value) : setDescription(e.target.value);
+    e.target.name === "name"
+      ? setName(e.target.value)
+      : setDescription(e.target.value);
   }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    props.onUpdateUser({
+      name,
+      about: description
+    })
+  }
+
   return (
     <PopupWithForm
       name="edit-profile"
       title="Edit Profil"
       isOpen={props.isOpen}
       onClose={props.onClose}
+      onSubmit={handleSubmit}
     >
       <label className="popup__field">
         <input
