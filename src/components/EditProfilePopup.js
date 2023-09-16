@@ -8,8 +8,8 @@ function EditProfilePopup(props) {
   const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
+    setName(currentUser.name || '');
+    setDescription(currentUser.about || '');
   }, [currentUser]);
 
   function handleChange(e) {

@@ -21,7 +21,7 @@ function App() {
       setCurrentUser(data);
     });
     const apiCall = api.getUserInformation();
-    console.log(apiCall);
+    console.log(`Get Data Api: ${apiCall}`);
   }, []);
 
   function handleEditAvatarClick() {
@@ -42,10 +42,12 @@ function App() {
   }
 
   function handleUpdateUser(updatedUserData) {
-    api
-      .updateProfile(updatedUserData.name, updatedUserData.about).then((data) => {
-        console.log(data);
-      });
+    // api
+    //   .updateProfile(updatedUserData.name, updatedUserData.about).then((data) => {
+    //     console.log(data);
+    //   });
+    const apiCallUpdate = api.updateProfile(updatedUserData.name, updatedUserData);
+    console.log(`Patch Update Data Api: ${apiCallUpdate}`);
   }
 
   function closeAllPopups() {
