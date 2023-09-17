@@ -10,8 +10,9 @@ function PopupWithForm(props) {
             {props.children}
             <button
                 name="simpan-button"
-                className="popup__save popup__save_disabled"
+                className="popup__save"
                 type="submit"
+                ref={props.saveButton}
               >
                 Simpan
               </button>

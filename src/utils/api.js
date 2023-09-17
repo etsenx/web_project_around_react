@@ -45,14 +45,36 @@ export default class Api {
   }
 
   // Update Profile
-  updateProfile(name, about) {
-    fetch(`${this.baseUrl}/users/me`, {
+  updateProfile(saveButton, updatedUserData) {
+    return new Promise((resolve, reject) => {
+      fetch(`${this.baseUrl}/users/me`, {
+        method: "PATCH",
+        headers: this.headers,
+        body: JSON.stringify(updatedUserData),
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          }
+          return reject(`Error: ${res.status}`);
+        })
+        .then((updatedData) => {
+          return resolve(updatedData);
+        })
+        .catch((err) => {
+          return reject(err);
+        })
+      .finally(() => {
+        saveButton.current.textContent = "Simpan";
+      })
+    });
+  }
+
+  updateProfilePicture(saveButton, avatar) {
+    return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers: this.headers,
-      body: JSON.stringify({
-        name,
-        about,
-      }),
+      body: JSON.stringify(avatar),
     })
       .then((res) => {
         if (res.status === 200) {
@@ -60,51 +82,22 @@ export default class Api {
         }
         return Promise.reject(`Error: ${res.status}`);
       })
-      .then((updatedData) => {
-        console.log(updatedData);
-        return Promise.resolve(updatedData);
+      .then((profile) => {
+        return Promise.resolve(profile.avatar);
       })
       .catch((err) => {
         return Promise.reject(err);
       })
-      // .finally(() => {
-      //   saveButton.textContent = "Done";
-      // })
+      .finally(() => {
+        saveButton.current.textContent = "Simpan";
+      });
   }
 
-  updateProfilePicture(saveButton, avatar) {
-    return fetch(`${this.baseUrl}/users/me/avatar`, {
-      method: "PATCH",
-      headers: this.headers,
-      body: JSON.stringify({
-        avatar
-      })
-    })
-    .then((res) => {
-      if (res.status === 200) {
-        return res.json();
-      }
-      return Promise.reject(`Error: ${res.status}`);
-    })
-    .then((profile) => {
-      return Promise.resolve(profile.avatar);
-    })
-    .catch((err) => {
-      return Promise.reject(err);
-    })
-    .finally(() => {
-      saveButton.textContent = "Simpan";
-    })
-  }
-
-  addCard(saveButton, name, link) {
+  addCard(saveButton ,newCardData) {
     const newCard = fetch(`${this.baseUrl}/cards`, {
       method: "POST",
       headers: this.headers,
-      body: JSON.stringify({
-        name,
-        link,
-      }),
+      body: JSON.stringify(newCardData),
     })
       .then((res) => {
         if (res.status === 200) {
@@ -119,13 +112,13 @@ export default class Api {
         return Promise.reject(err);
       })
       .finally(() => {
-        saveButton.textContent = "Simpan";
-      })
+        saveButton.current.textContent = "Simpan";
+      });
     return newCard;
   }
 
   deleteCard(cardId) {
-    fetch(`${this.baseUrl}/cards/${cardId}`, {
+    return fetch(`${this.baseUrl}/cards/${cardId}`, {
       method: "DELETE",
       headers: this.headers,
     })
@@ -185,7 +178,6 @@ export default class Api {
         return Promise.reject(err);
       });
   }
-
 }
 
 export const api = new Api({

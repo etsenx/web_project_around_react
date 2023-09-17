@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { createRef, useContext, useEffect, useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
@@ -6,10 +6,11 @@ function EditProfilePopup(props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const currentUser = useContext(CurrentUserContext);
+  const saveButton = createRef();
 
   useEffect(() => {
-    setName(currentUser.name || '');
-    setDescription(currentUser.about || '');
+    setName(currentUser.name || "");
+    setDescription(currentUser.about || "");
   }, [currentUser]);
 
   function handleChange(e) {
@@ -21,11 +22,12 @@ function EditProfilePopup(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    props.onUpdateUser({
+    const updatedUserData = {
       name,
-      about: description
-    })
+      about: description,
+    };
+    props.onUpdateUser(saveButton, updatedUserData);
+    saveButton.current.textContent = "Menyimpan...";
   }
 
   return (
@@ -35,6 +37,7 @@ function EditProfilePopup(props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}
+      saveButton={saveButton}
     >
       <label className="popup__field">
         <input
